@@ -1,2 +1,2 @@
 # justforfun
-code for fun &amp; my experiments with code
+fun coding &amp; my experiments with code
