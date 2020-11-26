@@ -35,7 +35,7 @@ def output_relationship(partner1, partner2, relationship):
 def take_input():
     partner1 = input("Enter Partner1 name: ")
     partner2 = input("Enter Partner2 name: ")
-    return partner1, partner2
+    return partner1.upper(), partner2.upper()
 
 if __name__ == "__main__":
     partner1, partner2 = take_input()

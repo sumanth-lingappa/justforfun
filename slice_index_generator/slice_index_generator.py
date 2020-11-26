@@ -3,12 +3,6 @@ import sys
 string = sys.argv[1] # user input can be taken using input()
 print()
 
-# positive_indexing
-print(' ',end='')
-for positive_index in range(len(string)):
-    print(f'{positive_index:^3} ', end='')
-print()
-    
 # negative_indexing
 print(' ',end='')
 for negative_index in range(-len(string),0):
@@ -24,7 +18,14 @@ for letter in string:
     print(f' {letter} |', end='')
 print()
 
-# bottom border 
+# bottom border
 print('+' + '---+'*len(string))
+
+
+# positive_indexing
+print(' ',end='')
+for positive_index in range(len(string)):
+    print(f'{positive_index:^3} ', end='')
+print()
 
 print()
