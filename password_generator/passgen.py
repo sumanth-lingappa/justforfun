@@ -1,29 +1,55 @@
 import random
+import string
+import argparse
 
-import sys
+# Define the argument parser
+parser = argparse.ArgumentParser(description="Generate a secure random password.")
+parser.add_argument("minlen", type=int, nargs="?", default=8, help="Minimum length of the password (default: 8).")
+parser.add_argument("maxlen", type=int, nargs="?", default=12, help="Maximum length of the password (default: 12).")
+parser.add_argument("--lowercase", action="store_true", help="Include lowercase letters.")
+parser.add_argument("--uppercase", action="store_true", help="Include uppercase letters.")
+parser.add_argument("--special", action="store_true", help="Include special characters.")
+parser.add_argument("--numbers", action="store_true", help="Include numbers.")
 
-minlen = int(sys.argv[1])
-maxlen = int(sys.argv[2])
+args = parser.parse_args()
 
-islowercase = True
-isuppercase = True
-isspecialchar = True
-isnumbers = True
+# Validate minlen and maxlen
+if args.minlen > args.maxlen:
+    raise ValueError("Minimum length cannot be greater than maximum length.")
 
+# Character sets
+lowercase_chars = string.ascii_lowercase
+uppercase_chars = string.ascii_uppercase
+special_chars = string.punctuation
+number_chars = string.digits
 
-lowercase_chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-uppercase_chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-special_chars = ['@', '#', '$', '%', '=', ':', '?', '.', '/', '|', '~', '>',  '*', '(', ')']
-number_chars = ['1', '2', '3', '4', '6', '7', '8', '9', '0']
-
-
+# Build the pool of possible characters
 possible_password_chars = []
-if islowercase: possible_password_chars += lowercase_chars
-if isuppercase: possible_password_chars += uppercase_chars
-if isspecialchar: possible_password_chars += special_chars
-if isnumbers: possible_password_chars += number_chars
+if args.lowercase:
+    possible_password_chars += lowercase_chars
+if args.uppercase:
+    possible_password_chars += uppercase_chars
+if args.special:
+    possible_password_chars += special_chars
+if args.numbers:
+    possible_password_chars += number_chars
 
+# Ensure at least one character type is selected
+if not possible_password_chars:
+    raise ValueError("At least one character type must be selected (use --lowercase, --uppercase, --special, or --numbers).")
 
-password = random.choices(possible_password_chars, k=random.randint(minlen, maxlen))
+# Generate the password
+password_length = random.randint(args.minlen, args.maxlen)
+password = [
+    random.choice(lowercase_chars) if args.lowercase else "",
+    random.choice(uppercase_chars) if args.uppercase else "",
+    random.choice(special_chars) if args.special else "",
+    random.choice(number_chars) if args.numbers else "",
+]
 
-print(''.join(password))
+# Fill the rest of the password with random characters from the pool
+password += random.choices(possible_password_chars, k=password_length - len(password))
+random.shuffle(password)
+
+# Print the final password
+print("Generated Password:", ''.join(password))
